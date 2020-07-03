@@ -1,0 +1,100 @@
+<template>
+  <div class="mx-auto col-xl-3">
+    <div v-if="note">
+      <v-form @submit.prevent>
+        <v-text-field label="Title" v-model="note.title" clear-icon="mdi-close-circle" clearable solo flat dense hide-details required>
+        </v-text-field>
+        <v-list>
+          <Todo
+            v-for="(todo, i) of note.todos"
+            :todo="todo"
+            :key="todo.id"
+            :index="i"
+            @remove-todo="removeTodo"
+          />
+        </v-list>
+
+          <AddTodo @add-todo="addTodo"/>
+
+        <v-btn type="submit" @click="confirmSave = true;$router.push('/')" class="mr-2" depressed outlined color="success">save</v-btn>
+        <v-btn type="submit" @click.stop="dialog = true" text right>cancel</v-btn>
+        <v-dialog  v-model="dialog"  max-width="290">
+          <v-card>
+            <v-card-title class="headline">Do you want to leave?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1"  text  @click="dialog = false">cancel</v-btn>
+              <v-btn color="green darken-1" text  @click="confirmCancel = true;$router.push('/')">ok</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+      </v-form>
+    </div>
+    <h1 v-else>Page not found!</h1>
+  </div>
+</template>
+
+<script>
+import AddTodo from '@/components/AddTodo'
+import Todo from '@/components/Todo'
+
+export default {
+  name: 'editnote',
+  computed: {
+    note() {
+      return this.$store.getters.noteById(+this.$route.params.id)
+    }
+  },
+  data() {
+    return {
+      todos: [],
+      title: '',
+      id: null,
+      dialog: false,
+      confirmCancel: false,
+      confirmSave: false
+    }
+  },
+  created() {
+    this.beforeEditNote = Object.assign({}, this.note)
+    this.beforeEditNoteTodo = Array.from(this.note.todos)
+  },
+  methods: {
+    removeTodo(id) {
+        this.note.todos = this.note.todos.filter(t => t.id !== id)
+    },
+    addTodo(todo) {
+      this.note.todos.push(todo)
+    }
+  },
+  beforeRouteLeave(to, from, next) {
+    let confirmSave = this.confirmSave
+    let confirmCancel = this.confirmCancel
+
+    if (!confirmSave) {
+      this.dialog = true
+      
+      if (confirmCancel) {
+        Object.assign(this.note, this.beforeEditNote)
+        this.note.todos = Array.from(this.beforeEditNoteTodo)
+        next()
+      } else {
+        next(false)
+      }
+    } else if (confirmSave) {
+      this.$store.dispatch('updateNote', {
+        title: this.title || 'Note',
+        id: this.id,
+        todos: this.todos
+      })
+      next()
+    }
+    
+  },
+  components: {
+    AddTodo,
+    Todo
+  }
+}
+</script>
