@@ -1,2 +1,2 @@
-# tododo
+# Tododo
 Todo app
