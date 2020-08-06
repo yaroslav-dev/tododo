@@ -1,17 +1,21 @@
 <template>
-  <div class="mx-auto col-xl-3">
+  <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
     <div v-if="note">
       <v-form @submit.prevent>
-        <v-text-field label="Title" v-model="note.title" clear-icon="mdi-close-circle" clearable solo flat dense hide-details required>
+        <v-text-field class="pr-3" label="Title" v-model="note.title" clear-icon="mdi-close" clearable solo flat dense hide-details required>
         </v-text-field>
         <v-list>
-          <Todo
-            v-for="(todo, i) of note.todos"
-            :todo="todo"
-            :key="todo.id"
-            :index="i"
-            @remove-todo="removeTodo"
-          />
+          <draggable v-model="note.todos" v-bind="dragOptions" @start="drag = true" @end="drag = false" handle=".handle">
+            <transition-group name="list">
+              <Todo
+                v-for="(todo, i) of note.todos"
+                :todo="todo"
+                :key="todo.id"
+                :index="i"
+                @remove-todo="removeTodo"
+              />
+            </transition-group>
+          </draggable>
         </v-list>
 
           <AddTodo @add-todo="addTodo"/>
@@ -38,12 +42,21 @@
 <script>
 import AddTodo from '@/components/AddTodo'
 import Todo from '@/components/Todo'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'editnote',
   computed: {
     note() {
       return this.$store.getters.noteById(+this.$route.params.id)
+    },
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   data() {
@@ -94,7 +107,23 @@ export default {
   },
   components: {
     AddTodo,
-    Todo
+    Todo,
+    draggable
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.list-enter-active {
+  transition: all .5s;
+}
+.list-leave-active {
+  transition: all .2s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+}
+.add-move {
+  transition: 1s;
+}
+</style>

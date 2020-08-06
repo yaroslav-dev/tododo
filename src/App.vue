@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
-      class="pl-1"
+      class="pl-0"
       color="white"
       elevate-on-scroll
       fixed
@@ -11,11 +11,14 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <router-link to='/add' class="link">
-        <v-btn depressed small outlined color="success">create note</v-btn>
+        <v-btn class="d-none d-sm-flex" depressed small outlined color="success">create note</v-btn>
+        <v-btn class="d-flex d-sm-none" depressed small outlined color="success"><v-icon>mdi-plus</v-icon></v-btn>
       </router-link>
     </v-app-bar>
     <v-main class="mt-16">
-      <router-view />
+      <v-container class="px-0" fluid>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>

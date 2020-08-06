@@ -1,19 +1,25 @@
 <template>
-  <div class="mx-auto col-xl-3">
+  <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
     <h1>Create note</h1>
     <v-form ref="form" @submit.prevent="submitHandler">
       <v-text-field label="Title" autofocus v-model="title" solo flat dense hide-details clearable required>
       </v-text-field>
       <v-list>
-        <Todo
-          v-for="(todo, i) of todos"
-          :todo="todo"
-          :key="todo.id"
-          :index="i"
-          @remove-todo="removeTodo"
-        />
+        <draggable v-model="todos" v-bind="dragOptions" @start="drag = true" @end="drag = false"  handle=".handle">
+          <transition-group name="list">
+            <Todo
+              v-for="(todo, i) of todos"
+              :todo="todo"
+              :key="todo.id"
+              :index="i"
+              @remove-todo="removeTodo"
+            />
+          </transition-group>
+        </draggable>
       </v-list>
-      <AddTodo @add-todo="addTodo"/>
+      <transition name="add">
+        <AddTodo @add-todo="addTodo"/>
+      </transition>
       <v-btn type="submit" class="mr-2" depressed outlined color="success">Create</v-btn>
       <v-btn type="submit" @click.stop.prevent="dialog = true" text right>Cancel</v-btn>
       <v-dialog  v-model="dialog"  max-width="290">
@@ -33,8 +39,19 @@
 <script>
 import AddTodo from '@/components/AddTodo'
 import Todo from '@/components/Todo'
+import draggable from 'vuedraggable'
 
 export default {
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    }
+  },
   name: 'addnote',
   data() {
     return {
@@ -77,7 +94,23 @@ export default {
   },
   components: {
     AddTodo,
-    Todo
+    Todo,
+    draggable
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.list-enter-active {
+  transition: all .5s;
+}
+.list-leave-active {
+  transition: all .2s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+}
+.add-move {
+  transition: 1s;
+}
+</style>

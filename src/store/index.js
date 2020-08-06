@@ -16,21 +16,17 @@ export default new Vuex.Store({
       const notes = state.notes.concat()
       const idx = notes.findIndex(t => t.id === id)
       const note = notes[idx]
-
       notes[idx] = {...note, title, id, todos}
-
       state.notes = notes
       localStorage.setItem('notes', JSON.stringify(state.notes))
     },
     deleteNote(state, index) {
-      const notes = state.notes.concat()
-
+      let notes = state.notes.concat()
       for (let i = 0; i < notes.length; i++) {
-        if (notes[i].id == index.id) {
+        if (notes[i].id == index) {
           notes.splice(i, 1)
         }
       }
-      
       state.notes = notes
       localStorage.setItem('notes', JSON.stringify(state.notes))
     }
