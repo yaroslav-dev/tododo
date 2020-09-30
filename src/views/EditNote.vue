@@ -2,15 +2,28 @@
   <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
     <div v-if="note">
       <v-form @submit.prevent>
-        <v-text-field class="pr-3" label="Title" v-model="note.title" clear-icon="mdi-close" clearable solo flat dense hide-details required>
-        </v-text-field>
-        <v-list>
+
+        <v-row class="col-12 mr-0 pb-0 pl-4 d-flex">
+          <v-text-field class="title" label="Title" v-model="note.title" solo flat dense hide-details required></v-text-field>
+          <span class="align-self-center mt-1">{{note.todos.filter(t => t.done).length}}/{{note.todos.length}}</span>
+        </v-row>
+        
+        <v-list transition="slide-y-transition">
           <draggable v-model="note.todos" v-bind="dragOptions" @start="drag = true" @end="drag = false" handle=".handle">
             <transition-group name="list">
               <Todo
-                v-for="(todo, i) of note.todos"
+                v-for="(todo, i) of note.todos.filter(t => !t.done)"
                 :todo="todo"
                 :key="todo.id"
+                :done="todo.done"
+                :index="i"
+                @remove-todo="removeTodo"
+              />
+              <Todo
+                v-for="(todo, i) of note.todos.filter(t => t.done)"
+                :todo="todo"
+                :key="todo.id"
+                :done="todo.done"
                 :index="i"
                 @remove-todo="removeTodo"
               />
@@ -18,10 +31,11 @@
           </draggable>
         </v-list>
 
+
           <AddTodo @add-todo="addTodo"/>
 
-        <v-btn type="submit" @click="confirmSave = true;$router.push('/')" class="mr-2" depressed outlined color="success">save</v-btn>
-        <v-btn type="submit" @click.stop="dialog = true" text right>cancel</v-btn>
+        <v-btn type="submit" @click="confirmSave = true;$router.push('/')" class="mr-2" rounded x-large depressed outlined color="success">save</v-btn>
+        <v-btn type="submit" @click.stop="dialog = true" rounded x-large text right>cancel</v-btn>
         <v-dialog  v-model="dialog"  max-width="290">
           <v-card>
             <v-card-title class="headline">Do you want to leave?</v-card-title>
@@ -125,5 +139,11 @@ export default {
 }
 .add-move {
   transition: 1s;
+}
+.ghost {
+  opacity: 0;
+}
+.title {
+  font-size: 24px;
 }
 </style>

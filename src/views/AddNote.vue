@@ -1,8 +1,8 @@
 <template>
   <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
-    <h1>Create note</h1>
+    <h1>Create list</h1>
     <v-form ref="form" @submit.prevent="submitHandler">
-      <v-text-field label="Title" autofocus v-model="title" solo flat dense hide-details clearable required>
+      <v-text-field label="Title" autofocus v-model="title" solo flat dense hide-details required>
       </v-text-field>
       <v-list>
         <draggable v-model="todos" v-bind="dragOptions" @start="drag = true" @end="drag = false"  handle=".handle">
@@ -70,7 +70,7 @@ export default {
     },
     submitHandler() {
       const note = {
-        title: this.title || 'Note',
+        title: this.title || 'Shopping list',
         id: Date.now(),
         todos: this.todos
       }

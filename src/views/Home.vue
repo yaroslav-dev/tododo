@@ -1,23 +1,26 @@
 <template>
   <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
-    <v-card class="mb-5" v-for="note of notes" :key="note.id" outlined>
-      <v-card-title class="pb-1">{{note.title}}</v-card-title>
-      <v-list class="pt-0">
-        <Todo
-          v-for="(todo, i) of note.todos"
-          :todo="todo"
-          :key="todo.id"
-          :index="i"
-        />
-      </v-list>
-      <v-divider></v-divider>
+
+    <v-card class="mb-3 d-flex" v-for="note of notes" :key="note.id" outlined>
+      <router-link class="flex-grow-1" style="cursor:pointer" tag="span" :to="'/edit/' + note.id">
+        <v-card-title class="pr-0">{{note.title}}<v-spacer></v-spacer>{{note.todos.filter(t => t.done).length}}/{{note.todos.length}}</v-card-title>
+      </router-link>
       <v-card-actions>
-        <router-link tag="span" :to="'/edit/' + note.id">
-          <v-btn text>edit</v-btn>
-        </router-link>
-        <v-btn color="error"  @click.stop="dialogHandler(note.id)"  text depressed>delete</v-btn>
+        <v-menu bottom left>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click.stop="dialogHandler(note.id)">
+              <v-list-item-title>Delete</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-card-actions>
     </v-card>
+    
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline">Delete note?</v-card-title>
@@ -29,24 +32,26 @@
       </v-card>
     </v-dialog>
     <div class="mx-auto flex-column justify-center" v-if="!notes.length">
-      <h1 class="h1-center">Create your first note</h1>
-      <router-link to='/add' class="d-flex link justify-center ">
-        <v-btn
+      <h1 class="h1-center">Create your first shopping list</h1>
+    </div>
+
+    <v-app-bar class="ml-auto rounded-pill" bottom fixed hide-on-scroll flat scroll-threshold="1" width="97" height="157" color="transparent">
+      <v-btn
+          to='/add'
           color="pink"
+          class="mb-12"
           fab
           dark
-          center
-          small
+          large
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
-      </router-link>
-    </div>
+    </v-app-bar>
+
   </div>
 </template>
 
 <script>
-import Todo from '@/components/Todo'
 
 export default {
   computed: {
@@ -74,7 +79,6 @@ export default {
     }
   },
   components: {
-    Todo
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-    <v-text-field transition="slide-y-transition" @keydown.enter.prevent="addTodo" id="add-todo" type="text" class="" label="Add todo" solo flat dense v-model="title" :autofocus="this.$route.path != '/add'">
-      <v-btn append-icon="mdi-plus" @click="addTodo" slot="append" color="success" small text>
+    <v-text-field class="mb-3" @keydown.enter.prevent="addTodo" id="add-todo" type="text" label="Add item" hide-details solo flat rounded outlined success v-model="title">
+      <v-btn @click="addTodo" slot="append" color="success" icon rounded text>
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-text-field>
