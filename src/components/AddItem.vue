@@ -1,6 +1,6 @@
 <template>
-    <v-text-field class="mb-3" @keydown.enter.prevent="addTodo" id="add-todo" type="text" label="Add item" hide-details solo flat rounded outlined success v-model="title">
-      <v-btn @click="addTodo" slot="append" color="success" icon rounded text>
+    <v-text-field class="mb-3" @keydown.enter.prevent="addItem" id="add-item" type="text" label="Add item" hide-details solo flat rounded outlined success v-model="title">
+      <v-btn @click="addItem" slot="append" color="success" icon rounded text>
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </v-text-field>
@@ -16,14 +16,14 @@ export default {
     }
   },
   methods: {
-    addTodo() {
+    addItem() {
       if (this.title.trim()) {
-        const todo = {
+        const item = {
           id: Date.now(),
           title: this.title,
           completed: false
         }
-        this.$emit('add-todo', todo)
+        this.$emit('add-item', item)
         this.title = ''
       }
     }

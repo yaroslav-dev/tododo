@@ -1,11 +1,11 @@
 <template>
   <v-list-item class="px-0">
     <v-card class="px-3 my-1 d-flex align-content-center flex-grow-1" outlined>
-    <v-checkbox class="py-0 my-0 align-self-center" :color="todo.done && 'grey' || 'primary'" hide-details v-model="todo.done" :checked="todo.done == true" :ripple="false"></v-checkbox>
-      <v-text-field @focus="rmButton = true" @blur.prevent="blurDelay" :disabled="todo.done" :class="todo.done && 'text-decoration-line-through' || 'text-decoration-none'" class="flex-grow-1" type="text" full-width solo flat single-line hide-details v-model="todo.title"></v-text-field>
+    <v-checkbox class="py-0 my-0 align-self-center" :color="item.done && 'grey' || 'primary'" hide-details v-model="item.done" :checked="item.done == true" :ripple="false"></v-checkbox>
+      <v-text-field @focus="rmButton = true" @blur.prevent="blurDelay" :disabled="item.done" :class="item.done && 'text-decoration-line-through' || 'text-decoration-none'" class="flex-grow-1" type="text" full-width solo flat single-line hide-details v-model="item.title"></v-text-field>
     <v-spacer></v-spacer>
     <transition name="fade">
-      <v-btn v-if="rmButton" @click="$emit('remove-todo', todo.id)" class="align-self-center" icon text >
+      <v-btn v-if="rmButton" @click="$emit('remove-item', item.id)" class="align-self-center" icon text >
         <!-- <v-icon>mdi-close</v-icon> -->
         <v-icon>mdi-trash-can-outline</v-icon>
       </v-btn>
@@ -25,7 +25,7 @@
       }
     },
     props: {
-      todo: {
+      item: {
         type: Object,
         required: true,
       },

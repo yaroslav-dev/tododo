@@ -5,23 +5,23 @@
       <v-text-field label="Title" autofocus v-model="title" solo flat dense hide-details required>
       </v-text-field>
       <v-list>
-        <draggable v-model="todos" v-bind="dragOptions" @start="drag = true" @end="drag = false"  handle=".handle">
+        <draggable v-model="items" v-bind="dragOptions" @start="drag = true" @end="drag = false"  handle=".handle">
           <transition-group name="list">
-            <Todo
-              v-for="(todo, i) of todos"
-              :todo="todo"
-              :key="todo.id"
+            <Item
+              v-for="(item, i) of items"
+              :item="item"
+              :key="item.id"
               :index="i"
-              @remove-todo="removeTodo"
+              @remove-item="removeItem"
             />
           </transition-group>
         </draggable>
       </v-list>
       <transition name="add">
-        <AddTodo @add-todo="addTodo"/>
+        <AddItem @add-item="addItem"/>
       </transition>
-      <v-btn type="submit" class="mr-2" depressed outlined color="success">Create</v-btn>
-      <v-btn type="submit" @click.stop.prevent="dialog = true" text right>Cancel</v-btn>
+      <v-btn type="submit" class="mr-2" rounded x-large depressed outlined color="success">Create</v-btn>
+      <v-btn type="submit" @click.stop.prevent="dialog = true" rounded x-large text right>Cancel</v-btn>
       <v-dialog  v-model="dialog"  max-width="290">
         <v-card>
           <v-card-title class="headline">Do you want to leave?</v-card-title>
@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import AddTodo from '@/components/AddTodo'
-import Todo from '@/components/Todo'
+import AddItem from '@/components/AddItem'
+import Item from '@/components/Item'
 import draggable from 'vuedraggable'
 
 export default {
@@ -55,26 +55,26 @@ export default {
   name: 'addnote',
   data() {
     return {
-      todos: [],
+      items: [],
       title: '',
       id: null,
       dialog: false,
     }
   },
   methods: {
-    removeTodo(id) {
-      this.todos = this.todos.filter(t => t.id !== id)
+    removeItem(id) {
+      this.items = this.items.filter(t => t.id !== id)
     },
-    addTodo(todo) {
-      this.todos.push(todo)
+    addItem(item) {
+      this.items.push(item)
     },
     submitHandler() {
-      const note = {
+      const list = {
         title: this.title || 'Shopping list',
         id: Date.now(),
-        todos: this.todos
+        items: this.items
       }
-      this.$store.dispatch('createNote', note)
+      this.$store.dispatch('createList', list)
       this.$router.push('/')
     },
     cancel() {
@@ -93,8 +93,8 @@ export default {
     }
   },
   components: {
-    AddTodo,
-    Todo,
+    AddItem,
+    Item,
     draggable
   }
 }

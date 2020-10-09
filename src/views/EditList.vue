@@ -1,38 +1,38 @@
 <template>
   <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
-    <div v-if="note">
+    <div v-if="list">
       <v-form @submit.prevent>
 
-        <v-row class="col-12 mr-0 pb-0 pl-4 d-flex">
-          <v-text-field class="title" label="Title" v-model="note.title" solo flat dense hide-details required></v-text-field>
-          <span class="align-self-center mt-1">{{note.todos.filter(t => t.done).length}}/{{note.todos.length}}</span>
+        <v-row class="col-12 mr-0 pb-0 pl-4">
+          <v-text-field class="title" label="Title" v-model="list.title" solo flat dense hide-details required></v-text-field>
+          <span class="align-self-center mt-1">{{list.items.filter(t => t.done).length}}/{{list.items.length}}</span>
         </v-row>
         
         <v-list transition="slide-y-transition">
-          <draggable v-model="note.todos" v-bind="dragOptions" @start="drag = true" @end="drag = false" handle=".handle">
+          <draggable v-model="list.items" v-bind="dragOptions" @start="drag = true" @end="drag = false" handle=".handle">
             <transition-group name="list">
-              <Todo
-                v-for="(todo, i) of note.todos.filter(t => !t.done)"
-                :todo="todo"
-                :key="todo.id"
-                :done="todo.done"
+              <Item
+                v-for="(item, i) of list.items.filter(t => !t.done)"
+                :item="item"
+                :key="item.id"
+                :done="item.done"
                 :index="i"
-                @remove-todo="removeTodo"
+                @remove-item="removeItem"
               />
-              <Todo
-                v-for="(todo, i) of note.todos.filter(t => t.done)"
-                :todo="todo"
-                :key="todo.id"
-                :done="todo.done"
+              <Item
+                v-for="(item, i) of list.items.filter(t => t.done)"
+                :item="item"
+                :key="item.id"
+                :done="item.done"
                 :index="i"
-                @remove-todo="removeTodo"
+                @remove-item="removeItem"
               />
             </transition-group>
           </draggable>
         </v-list>
 
 
-          <AddTodo @add-todo="addTodo"/>
+          <AddItem @add-item="addItem"/>
 
         <v-btn type="submit" @click="confirmSave = true;$router.push('/')" class="mr-2" rounded x-large depressed outlined color="success">save</v-btn>
         <v-btn type="submit" @click.stop="dialog = true" rounded x-large text right>cancel</v-btn>
@@ -54,15 +54,14 @@
 </template>
 
 <script>
-import AddTodo from '@/components/AddTodo'
-import Todo from '@/components/Todo'
+import AddItem from '@/components/AddItem'
+import Item from '@/components/Item'
 import draggable from 'vuedraggable'
 
 export default {
-  name: 'editnote',
   computed: {
-    note() {
-      return this.$store.getters.noteById(+this.$route.params.id)
+    list() {
+      return this.$store.getters.listById(+this.$route.params.id)
     },
     dragOptions() {
       return {
@@ -75,7 +74,7 @@ export default {
   },
   data() {
     return {
-      todos: [],
+      items: [],
       title: '',
       id: null,
       dialog: false,
@@ -84,15 +83,15 @@ export default {
     }
   },
   created() {
-    this.beforeEditNote = Object.assign({}, this.note)
-    this.beforeEditNoteTodo = Array.from(this.note.todos)
+    this.beforeEditList = Object.assign({}, this.list)
+    this.beforeEditListItem = Array.from(this.list.items)
   },
   methods: {
-    removeTodo(id) {
-        this.note.todos = this.note.todos.filter(t => t.id !== id)
+    removeItem(id) {
+        this.list.items = this.list.items.filter(t => t.id !== id)
     },
-    addTodo(todo) {
-      this.note.todos.push(todo)
+    addItem(item) {
+      this.list.items.push(item)
     }
   },
   beforeRouteLeave(to, from, next) {
@@ -103,25 +102,25 @@ export default {
       this.dialog = true
       
       if (confirmCancel) {
-        Object.assign(this.note, this.beforeEditNote)
-        this.note.todos = Array.from(this.beforeEditNoteTodo)
+        Object.assign(this.list, this.beforeEditList)
+        this.list.items = Array.from(this.beforeEditListItem)
         next()
       } else {
         next(false)
       }
     } else if (confirmSave) {
-      this.$store.dispatch('updateNote', {
-        title: this.title || 'Note',
+      this.$store.dispatch('updateList', {
+        title: this.title || 'List',
         id: this.id,
-        todos: this.todos
+        items: this.items
       })
       next()
     }
     
   },
   components: {
-    AddTodo,
-    Todo,
+    AddItem,
+    Item,
     draggable
   }
 }

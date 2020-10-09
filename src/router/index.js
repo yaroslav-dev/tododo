@@ -6,18 +6,18 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/Home.vue')
+    name: 'ShopLists',
+    component: () => import('@/views/ShopLists.vue')
   },
   {
     path: '/add',
-    name: 'AddNote',
-    component: () => import('@/views/AddNote.vue')
+    name: 'AddList',
+    component: () => import('@/views/AddList.vue')
   },
   {
     path: '/edit/:id',
-    name: 'EditNote',
-    component: () => import('@/views/EditNote.vue')
+    name: 'EditList',
+    component: () => import('@/views/EditList.vue')
   }
 ]
 
