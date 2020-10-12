@@ -7,9 +7,9 @@ module.exports = {
   ],
   pwa: {
     name: 'Tododo',
-    themeColor: '#00ACC1',
+    themeColor: '#204051',
     appleMobileWebAppCapable: 'yes',
-    appleMobileWebAppStatusBarStyle: '#00ACC1',
-    msTileColor: '#00ACC1'
+    appleMobileWebAppStatusBarStyle: '#204051',
+    msTileColor: '#204051'
   }
 }
