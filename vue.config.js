@@ -6,7 +6,7 @@ module.exports = {
     "vuetify"
   ],
   pwa: {
-    name: 'Tododo',
+    name: 'Listify',
     themeColor: '#204051',
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: '#204051',

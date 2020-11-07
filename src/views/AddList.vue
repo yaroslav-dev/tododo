@@ -1,10 +1,10 @@
 <template>
   <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 mx-auto">
-    <h1>Create list</h1>
+    <h1 style="color: #e7dfd5;text-align: center;">Create list</h1>
     <v-form ref="form" @submit.prevent="submitHandler">
-      <v-text-field label="Title" autofocus v-model="title" solo flat dense hide-details required>
+      <v-text-field label="Title" color="#e7dfd5" background-color="transparent" v-model="title" dark solo flat outlined rounded hide-details required>
       </v-text-field>
-      <v-list>
+      <v-list color="transparent">
         <draggable v-model="items" v-bind="dragOptions" @start="drag = true" @end="drag = false"  handle=".handle">
           <transition-group name="list">
             <Item
@@ -20,15 +20,15 @@
       <transition name="add">
         <AddItem @add-item="addItem"/>
       </transition>
-      <v-btn type="submit" class="mr-2" rounded x-large depressed outlined color="success">Create</v-btn>
-      <v-btn type="submit" @click.stop.prevent="dialog = true" rounded x-large text right>Cancel</v-btn>
-      <v-dialog  v-model="dialog"  max-width="290">
-        <v-card>
-          <v-card-title class="headline">Do you want to leave?</v-card-title>
+      <v-btn type="submit" class="mr-2" rounded x-large depressed style="color:#3b6978;" color="#e7dfd5">Create</v-btn>
+      <v-btn type="submit" @click.stop.prevent="dialog = true" rounded x-large depressed outlined right color="#e7dfd5">Cancel</v-btn>
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card color="#e7dfd5">
+          <v-card-title style="color:#204051;" class="headline">Do you want to leave?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1"  text  @click="dialog = false">cancel</v-btn>
-            <v-btn color="green darken-1" text  @click.prevent="cancel">ok</v-btn>
+            <v-btn color="#3b6978"  text  @click="dialog = false">cancel</v-btn>
+            <v-btn color="#3b6978" text  @click.prevent="cancel">leave</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

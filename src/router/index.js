@@ -18,6 +18,11 @@ Vue.use(VueRouter)
     path: '/edit/:id',
     name: 'EditList',
     component: () => import('@/views/EditList.vue')
+  },
+  {
+    path: '/timer',
+    name: 'Timer',
+    component: () => import('@/views/Timer.vue')
   }
 ]
 
